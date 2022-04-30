@@ -1,8 +1,14 @@
 # Counterfit
 
-GoodVillaing Target
+Go to
+CounterfitJoy/counterfit/targets/
+Move savory_unsavory_model3.h5 into GoodVillain folder 
 
-Enter
+Follow the installation steps
+
+Then run GoodVillaing Target
+
+Enter:
 
 (interact GoodVillain #to load model)
 
