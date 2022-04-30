@@ -4,12 +4,17 @@ GoodVillaing Target
 
 Enter
 
-interact GoodVillain #to load model
-load art # to load attack type
-predict -i range(4) # to test models prediction
-use HopSkipJump #pick attack
-run #run it
-exit counterfit #to exit counterfit
+(interact GoodVillain #to load model)
+
+(load art # to load attack type)
+
+(predict -i range(4) # to test models prediction)
+
+(use HopSkipJump #pick attack)
+
+(run #run it)
+
+(exit counterfit #to exit counterfit)
 
 Documentation is in the {DocumentationJoy} file.
 
