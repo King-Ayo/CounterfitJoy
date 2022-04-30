@@ -1,0 +1,134 @@
+from keras_preprocessing.image import ImageDataGenerator
+from keras.models import Sequential
+from keras import backend as K
+import os
+from keras.layers.convolutional import Conv2D, MaxPooling2D, SeparableConv2D
+from keras.layers.core import Dense, Flatten, Dropout, Activation
+import numpy as np
+import torchvision.models as models
+from torchvision import transforms
+from torch import nn
+import torch
+from torch.nn import functional as F
+import PIL
+from keras.models import load_model
+from keras.preprocessing.image import load_img
+from keras.preprocessing.image import img_to_array
+from keras.applications.vgg16 import preprocess_input
+from keras.applications.vgg16 import decode_predictions
+from keras.applications.vgg16 import VGG16
+import numpy as np
+from matplotlib import pyplot as plt
+
+# Setting default information and drawing images
+img_width, img_height = 670, 460
+train_data_dir = 'C:/Users/jfala/Documents/model_c/train'
+validation_data_dir = 'C:/Users/jfala/Documents/model_c/valid'
+nb_train_samples = 40
+nb_validation_samples = 20
+epochs = 10
+batch_size = 16
+
+# Checks the type of image format to get the bast input type for the model
+
+if K.image_data_format() == 'channels_first':
+    input_shape = (3, img_width, img_height)
+else:
+    input_shape = (img_width, img_height, 3)
+
+#Create model
+
+model = Sequential()
+model.add(Conv2D(32, (2, 2), input_shape=input_shape))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+
+model.add(Conv2D(32, (2, 2)))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+
+model.add(Conv2D(64, (2, 2)))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+
+model.add(Flatten())
+model.add(Dense(64))
+model.add(Activation('relu'))
+model.add(Dropout(0.5))
+model.add(Dense(1))
+model.add(Activation('sigmoid'))
+
+# Compile model
+
+model.compile(loss='binary_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
+
+# Set parameters for the training data 
+
+train_datagen = ImageDataGenerator(
+    rescale=1. / 505,
+    shear_range=0.2,
+    zoom_range=0.2,
+    horizontal_flip=True)
+
+# Set parameters for the testing data 
+
+test_datagen = ImageDataGenerator(rescale=1. / 505)
+
+# Draw training data and transform it into data for the model
+
+train_generator = train_datagen.flow_from_directory(
+    train_data_dir,
+    target_size=(img_width, img_height),
+    batch_size=batch_size,
+    class_mode='binary')
+
+# Draw testing data and transform it into data for the model
+
+validation_generator = test_datagen.flow_from_directory(
+    validation_data_dir,
+    target_size=(img_width, img_height),
+    batch_size=batch_size,
+    class_mode='binary'
+)
+
+# Show images and their labels
+
+%matplotlib inline
+X,y = validation_generator.next()
+for i in range(0,16):
+    image = X[i]
+    label = y[i]
+    print (label)
+    plt.imshow(image)
+    plt.show()
+
+# Show filenames of data inside the generator
+
+validation_generator.filenames[0:21]
+
+# Show data type and shape of arrays in Validation generator
+
+X,y = next(validation_generator)
+print('X:',type(X))
+print('y:',type(y))
+print('X:',X.shape)
+print('y:',y.shape)]
+
+# Save X=image arrays and y= label values as NPZ file
+
+np.savez("final7",X=X,y=y)
+
+# Fit the model
+
+model.fit(
+    train_generator,
+    steps_per_epoch=nb_train_samples // batch_size,
+    epochs=epochs,
+    validation_data=validation_generator,
+    validation_steps=nb_validation_samples // batch_size)
+
+# Save fitted model
+
+model.save('savory_unsavory_model.h5')
+
+Go to GoodVillain Target and view the GoodVillain.py file to see how the model and npz file was entered into counterfit.
