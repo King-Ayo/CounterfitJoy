@@ -5,7 +5,7 @@ questionary==1.9.0
 python-Levenshtein==0.12.2
 rich>=10.10.0
 orjson==3.6.4
-flask==2.0.0
+flask==2.3.2
 
 # docs
 sphinx>=4.2.0
